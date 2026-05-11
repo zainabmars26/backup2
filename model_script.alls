@@ -1,0 +1,8 @@
+# model_script.alls.txt
+base_norm = normalization([0.0, 0.0, 0.0], [255.0, 255.0, 255.0])
+
+# Force Sigmoid on the score output layers to fix the threshold jump
+# Note: Layer names must match exactly what was in your scales list
+change_output_activation(best_fixed/conv94, sigmoid)
+change_output_activation(best_fixed/conv80, sigmoid)
+change_output_activation(best_fixed/conv64, sigmoid)
