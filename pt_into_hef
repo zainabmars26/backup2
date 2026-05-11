@@ -1,0 +1,6 @@
+hailo parser onnx best_fixed.onnx --hw-arch hailo8
+
+hailo optimize  best.har --model-script model_script.alls.txt --calib-set calib_set_255.npy --output-har model_optimized.har
+  #calib_set_255.npy is images from dataset converted into .npy format for optimization)
+
+hailo compiler model_optimized.har --hw-arch hailo8 --output-dir .
