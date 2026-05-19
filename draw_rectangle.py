@@ -118,7 +118,64 @@ def draw_boxes_with_nms(image, raw_results, conf_threshold=0.98, iou_threshold=0
             })
 
     return image, all_boxes, final_detections
+'''
+if len(indices) > 0:
+        for i in indices.flatten():
+            x, y, bw, bh = all_boxes[i]
+            
+            # --- CUSTOM DRAWING LOGIC ---
+            color = (0, 255, 0)  # Green color (BGR)
+            thickness = 2
+            
+            # 1. Define corner line lengths (e.g., 20% of the width/height or a fixed pixel length)
+            line_len_x = int(bw * 0.2)
+            line_len_y = int(bh * 0.2)
+            
+            # Top-Left Corner
+            cv2.line(image, (x, y), (x + line_len_x, y), color, thickness)
+            cv2.line(image, (x, y), (x, y + line_len_y), color, thickness)
+            
+            # Top-Right Corner
+            cv2.line(image, (x + bw, y), (x + bw - line_len_x, y), color, thickness)
+            cv2.line(image, (x + bw, y), (x + bw, y + line_len_y), color, thickness)
+            
+            # Bottom-Left Corner
+            cv2.line(image, (x, y + bh), (x + line_len_x, y + bh), color, thickness)
+            cv2.line(image, (x, y + bh), (x, y + bh - line_len_y), color, thickness)
+            
+            # Bottom-Right Corner
+            cv2.line(image, (x + bw, y + bh), (x + bw - line_len_x, y + bh), color, thickness)
+            cv2.line(image, (x + bw, y + bh), (x + bw, y + bh - line_len_y), color, thickness)
+            
+            # 2. Draw Crosshair Ticks (Top, Bottom, Left, Right)
+            center_x = x + int(bw / 2)
+            center_y = y + int(bh / 2)
+            tick_len = int(min(bw, bh) * 0.15) # Length of each crosshair line
+            gap = int(min(bw, bh) * 0.05)       # Small center gap so lines don't touch in the middle
+            
+            # Top tick
+            cv2.line(image, (center_x, y), (center_x, center_y - gap), color, thickness)
+            # Bottom tick
+            cv2.line(image, (center_x, y + bh), (center_x, center_y + gap), color, thickness)
+            # Left tick
+            cv2.line(image, (x, center_y), (center_x - gap, center_y), color, thickness)
+            # Right tick
+            cv2.line(image, (x + bw, center_y), (center_x + gap, center_y), color, thickness)
+            # ----------------------------
 
+            # Typo fix from your original snippet: changed 'calsses' to 'classes' (assuming you have a classes list)
+            # If your variable is actually spelled 'calsses', change it back below!
+            current_class_id = all_class_ids[i]
+            label = f" {classes[current_class_id]}: {all_scores[i]:.2f}"
+            cv2.putText(image, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
+            
+            final_detections.append({
+                "box": [x, y, bw, bh],
+                "confidence": all_scores[i],
+                "class_id": current_class_id,
+                "label": classes[current_class_id]
+            })
+'''
 # Add this return to your draw_boxes_with_nms function
 def get_detection_center(image, raw_results, conf_threshold=0.98):
     h, w, _ = image.shape
